@@ -6,7 +6,7 @@ const getAll = () => {
 }
 
 const getById = (id) => {
-    return fetch(urls.users + id)
+    return fetch(urls.users + `${id}`)
         .then(value => value.json())
 }
 
