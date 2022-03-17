@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
+
 import User from "../User/User";
+import {userService} from "../services/user.service";
 
 const Users = () => {
 
@@ -8,15 +10,11 @@ const Users = () => {
 
 
     const getUserId = (id) => {
-        fetch('https://jsonplaceholder.typicode.com/users/'+id)
-            .then(value => value.json())
-            .then(value => setUser(value));
+        userService.getById(id).then(value => setUser(value));
     }
 
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(value => value.json())
-            .then(value => setUsers(value));
+        userService.getAll().then(value => setUsers(value));
     }, [])
 
 
