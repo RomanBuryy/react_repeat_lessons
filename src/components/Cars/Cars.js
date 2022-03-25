@@ -9,6 +9,12 @@ const Cars = ({trigger}) => {
         console.log(carId);
     }
 
+    const updateCar = async (id, car) => {
+        await carService.updateById(id, car)
+    }
+
+
+
     const [cars, setCars] = useState([]);
 
     useEffect( () => {
@@ -17,7 +23,7 @@ const Cars = ({trigger}) => {
 
     return (
         <div>
-            {cars && cars.map(value => <Car key={value.id} car={value} deleteCar={deleteCar}/>)}
+            {cars && cars.map(value => <Car key={value.id} car={value} deleteCar={deleteCar} updateCar={updateCar}/>)}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Car = ({car, deleteCar}) => {
+const Car = ({car, deleteCar, updateCar}) => {
 
     return (
         <div>
@@ -8,9 +8,16 @@ const Car = ({car, deleteCar}) => {
             <div>model: {car.model} </div>
             <div>price: {car.price} </div>
             <div>year: {car.year} </div>
-            <button onClick={()=>{
+            <button onClick={() => {
                 deleteCar(car.id);
-            }}>delete</button>
+            }}>delete
+            </button>
+
+            <button onClick={() => {
+
+
+            }}>edit
+            </button>
             <br/>
         </div>
     );
