@@ -1,23 +1,49 @@
-import {createSlice} from '@reduxjs/toolkit'
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit'
+import {carService} from "../services";
 
+
+export const getAllCars = createAsyncThunk(
+    'carSlice/getAllCars',
+    async ()=>{
+        try {
+            const cars = await carService.getAll();
+            return cars
+        } catch (e){
+
+        }
+    }
+)
 
 const carSlice = createSlice({
     name: 'carSlice',
     initialState: {
-        cars: []
+        cars: [],
+        status: null,
+        error: null
     },
     reducers:{
         addCar: (state, action) => {
             state.cars.push({
                 id: new Date().getTime(),
                 ...action.payload.data
-
             })
         },
-        deleteCar: (state, action) => {}
+        deleteCar: (state, action) => {
+            state.cars = state.cars.filter(value => value.id !== action.payload.id)
+        }
     },
     extraReducers:{
+        [getAllCars.pending]: (state, action)=>{
+            state.status = 'loading';
+            state.error = null;
+        },
+        [getAllCars.fulfilled]: (state, action)=>{
+            state.status = 'fullfilled'
+            state.cars = action.payload;
+        },
+        [getAllCars.rejected]: (state, action)=>{
 
+        }
     }
 })
 

@@ -1,14 +1,22 @@
-import React from 'react';
+import React, {useEffect, useReducer} from 'react';
 import Car from "../Car/Car";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {getAllCars} from "../../store";
 
-const Cars = ({getCarId}) => {
+const Cars = () => {
 
-    const {cars} = useSelector(state => state.carReducer);
+    const {cars, status, error} = useSelector(state => state.carReducer);
+
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getAllCars())
+    }, []);
 
     return (
         <div>
-            {cars && cars.map(car => <Car key={car.id} car={car} getCarId={getCarId}/>)}
+            {status === 'loading' && <h1>Loading</h1>}
+            {cars && cars.map(car => <Car key={car.id} car={car}/>)}
         </div>
     );
 };
