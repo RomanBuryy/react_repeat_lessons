@@ -17,6 +17,7 @@ const Cars = () => {
         <div>
             {status === 'loading' && <h1>Loading</h1>}
             {cars && cars.map(car => <Car key={car.id} car={car}/>)}
+            {error && <h2>{error}</h2>}
         </div>
     );
 };

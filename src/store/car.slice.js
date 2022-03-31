@@ -4,15 +4,42 @@ import {carService} from "../services";
 
 export const getAllCars = createAsyncThunk(
     'carSlice/getAllCars',
-    async ()=>{
+    async (_, {rejectWithValue}) => {
         try {
             const cars = await carService.getAll();
             return cars
-        } catch (e){
-
+        } catch (e) {
+            return rejectWithValue(e.message)
         }
     }
 )
+
+export const createCar = createAsyncThunk(
+    'carSlice/createCar',
+    async ({data}, {dispatch}) =>{
+        try {
+           const newCar = await carService.create(data);
+           dispatch(addCar({data: newCar}));
+        } catch (e) {
+            console.log(e);
+        }
+    }
+)
+
+export const deleteCarThunk = createAsyncThunk(
+    'carSlice/deleteCar',
+    async ({id}, {dispatch}) =>{
+        try {
+            await carService.deleteById(id)
+            dispatch(deleteCar({id}))
+        }catch (e) {
+            console.log(e)
+        }
+    }
+)
+
+
+
 
 const carSlice = createSlice({
     name: 'carSlice',
@@ -21,27 +48,26 @@ const carSlice = createSlice({
         status: null,
         error: null
     },
-    reducers:{
+    reducers: {
         addCar: (state, action) => {
-            state.cars.push({
-                id: new Date().getTime(),
-                ...action.payload.data
-            })
+            state.cars.push(action.payload.data);
         },
         deleteCar: (state, action) => {
             state.cars = state.cars.filter(value => value.id !== action.payload.id)
         }
     },
-    extraReducers:{
-        [getAllCars.pending]: (state, action)=>{
+    extraReducers: {
+        [getAllCars.pending]: (state, action) => {
             state.status = 'loading';
             state.error = null;
         },
-        [getAllCars.fulfilled]: (state, action)=>{
+        [getAllCars.fulfilled]: (state, action) => {
             state.status = 'fullfilled'
             state.cars = action.payload;
         },
-        [getAllCars.rejected]: (state, action)=>{
+        [getAllCars.rejected]: (state, action) => {
+            state.status = 'rejected'
+            state.error = action.payload
 
         }
     }
